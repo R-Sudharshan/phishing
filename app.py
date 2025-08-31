@@ -1,9 +1,10 @@
 from flask import Flask, request, render_template
 import requests
+import os
 
 app = Flask(__name__)
 
-WEBHOOK_URL = "https://webhook.site/9262c2f0-605c-4c7a-8d50-63bc42b7133e"
+WEBHOOK_URL = os.environ.get("WEBHOOK_URL")
 
 @app.route('/')
 def index():
@@ -24,4 +25,5 @@ def send():
     return "<h2>Demo info sent safely to webhook!</h2><p>Check your webhook.site panel.</p>"
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    from waitress import serve
+    serve(app, host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
